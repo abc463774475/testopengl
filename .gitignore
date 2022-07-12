@@ -1,0 +1,18 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+x64
+x86
+/.vs/test1/FileContentIndex/3bdea702-bf7a-4451-ba9b-b2a6cab40f81.vsidx
+/.vs/test1/FileContentIndex/11260861-1dff-4865-9c1e-5a853f50f613.vsidx
+.vs
+*.exe
+.idea
+cmake-build-debug
+/test1/test1.vcxproj.filters
+/test1/test1.vcxproj.user
