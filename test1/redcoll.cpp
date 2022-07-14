@@ -41,34 +41,39 @@ void setupVertices (void){
             
             1.0f,-1.0f,1.0f,-1,-1,1,1,1,1,
 
-			
             -1.0f,-1.0f,1.0f,-1,1,1,1,1,1,
 			
             -1.0f,-1.0f,1.0f,-1,-1,-1,-1,1,1,
 			
-			
             -1.0f,-1.0f,-1.0f,-1,1,-1,-1,1,1,
 
-			
             -1.0f,-1.0f,1.0f,1,-1,1,1,-1,-1,
 
-			
             1.0f,-1.0f,-1.0f,-1,-1,-1,-1,-1,1,
-
-			
+	
             -1.0f,1.0f,-1.0f,1,1,-1,1,1,1,
 			
             1.0f,1.0f,1.0f,-1,1,1,-1,1,-1,
     };
 
+    float pyramidPostions[54] = {
+        -1,-1,1,1,-1,1,0,1,0,
+        1,-1,1,1,-1,-1,0,1,0,
+        1,-1,-1,-1,-1,-1,0,1,0,
+        -1,-1,-1,-1,-1,1,0,1,0,
+        -1,-1,-1,1,-1,1,-1,-1,1,
+        1,-1,1,-1,-1,-1,1,-1,-1,
+    };
+
     glGenVertexArrays(1, vao);
-
     glBindVertexArray(vao[0]);
-
     glGenBuffers(numVBOs, vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidPostions), pyramidPostions, GL_STATIC_DRAW);
 }
 
 
