@@ -19,6 +19,7 @@
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
+float pyrLocX, pyrLocY, pyrLocZ;
 
 GLuint renderingProgram;
 GLuint vao[numVAOs];
@@ -82,6 +83,7 @@ void init(GLFWwindow* window) {
     renderingProgram = createShaderProgram();
     cameraX = 0.0f; cameraY = 0.0f; cameraZ = 8.0f;
     cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f;
+    pyrLocX = 0, pyrLocY = 2; pyrLocZ = 0;
     setupVertices();
 }
 
@@ -97,30 +99,44 @@ void display(GLFWwindow *window, double currentTime){
 	aspect = (float)width / (float)height;
     pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
 
-    vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, - cameraY, - cameraZ)); 
-    mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX,cubeLocY, cubeLocZ));
-
+    vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
 	
-    auto tMat = glm::translate(glm::mat4(1.0f), 
-        glm::vec3(sin(0.35*currentTime)*2.0f, cos(0.52*currentTime)*2.0f, sin(0.7f*currentTime)*2.0f));
-	auto rMat = glm::rotate(glm::mat4(1.0f), 1.75f*(float)currentTime, glm::vec3(0.0f, 1.0f, 0.0f));
-	
-    rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(1.0f, 0.0f, 0.0f));
-    rMat = glm::rotate(rMat, 1.75f * (float)currentTime, glm::vec3(0.0f, 0.0f, 1.0f));
-    mMat = tMat * rMat;
-	
-    mvMat = vMat* mMat;
+    if (true) {
+        
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
 
-    glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, 0 ,0 );
-    glEnableVertexAttribArray(0);
+        mvMat = vMat * mMat;
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+        glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+
+
+    {
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(pyrLocX, pyrLocY, pyrLocZ));
+        mvMat = vMat* mMat;
+
+		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_TRIANGLES, 0, 18);
+    }
+
 }
 
 int main(int argn,char **argv) {
@@ -133,7 +149,7 @@ int main(int argn,char **argv) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	
-	GLFWwindow *window = glfwCreateWindow(600, 600, "Hello World", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(1600, 1600, "Hello World", NULL, NULL);
 
 
     glfwMakeContextCurrent(window);
