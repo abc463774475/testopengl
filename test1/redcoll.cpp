@@ -79,9 +79,8 @@ void setupVertices (void){
 
 
 void init(GLFWwindow* window) {
-    /*renderingProgram = */
     renderingProgram = createShaderProgram();
-    cameraX = 0.0f; cameraY = 0.0f; cameraZ = 8.0f;
+    cameraX = 0.0f; cameraY = 0.0f; cameraZ = 16.0f;
     cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f;
     pyrLocX = 0, pyrLocY = 2; pyrLocZ = 0;
     setupVertices();
@@ -103,7 +102,8 @@ void display(GLFWwindow *window, double currentTime){
 	
     if (true) {
         
-        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
+        auto g1 = glm::mat4(1.0f);
+        mMat = glm::translate(g1, glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
 
 
         mvMat = vMat * mMat;
@@ -123,7 +123,13 @@ void display(GLFWwindow *window, double currentTime){
 
     {
         mMat = glm::translate(glm::mat4(1.0f), glm::vec3(pyrLocX, pyrLocY, pyrLocZ));
+		
+        mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(sin(currentTime*2.0), cos(currentTime * 2.0),0.0 ));
         mvMat = vMat* mMat;
+
+        mvMat *= glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+		
+        mvMat *= glm::rotate(glm::mat4(1), (float)(currentTime), glm::vec3(0.0,0.0, 1.0));
 
 		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
@@ -170,6 +176,4 @@ int main(int argn,char **argv) {
     }
     glfwDestroyWindow(window);
 	glfwTerminate();
-	
-	
 }
