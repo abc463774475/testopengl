@@ -102,8 +102,15 @@ void display(GLFWwindow *window, double currentTime){
 	
     if (true) {
         
-        auto g1 = glm::mat4(1.0f);
-        mMat = glm::translate(g1, glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
+        auto m = glm::mat4(1.0f);
+        auto v = glm::vec3(cubeLocX, cubeLocY, cubeLocZ);
+        /*auto m0 = m[0];
+        auto v0 = v[0];
+        auto m3 = m[3];
+        auto tmp1 = m0 * v0;*/
+
+        auto t3 =  m[0] * v[0] + m[1] * v[1] + m[2] * v[2] + m[3];
+        mMat = glm::translate(m, v);
 
 
         mvMat = vMat * mMat;
