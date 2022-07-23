@@ -101,7 +101,7 @@ void setupVertices (void){
 void init(GLFWwindow* window) {
     renderingProgram = createShaderProgram();
     cameraX = 0.0f; cameraY = 0.0f; cameraZ = 16;
-    cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f;
+    cubeLocX = 0.0f; cubeLocY = -3.5f; cubeLocZ = 0.0f;
     pyrLocX = 0, pyrLocY = 2; pyrLocZ = 0;
 	lineLocX = 0, lineLocY = 0, lineLocZ = 0;
 	pointLocX = 0, pointLocY = 0, pointLocZ = 0;
@@ -122,8 +122,8 @@ void display(GLFWwindow *window, double currentTime){
 
     vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
 	
-    if (true) {     
-        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
+    for (int i = 0; i < 24; i++) {
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX + 2*cos(i), cubeLocY + 2*sin(i), cubeLocZ + sin(i)));
 
         mvMat = vMat * mMat;
 
