@@ -15,13 +15,14 @@
 
 
 #define numVAOs 1
-#define numVBOs 3
+#define numVBOs 4
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
 float pyrLocX, pyrLocY, pyrLocZ;
 
 float lineLocX, lineLocY, lineLocZ;
+float pointLocX, pointLocY, pointLocZ;
 
 GLuint renderingProgram;
 GLuint vao[numVAOs];
@@ -74,6 +75,11 @@ void setupVertices (void){
 		3,0,0,
     };
 
+    float pointPosition[] = {
+        1,1,0,
+        -1,1,0,
+        0,1,0,
+    };
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
     glGenBuffers(numVBOs, vbo);
@@ -86,6 +92,9 @@ void setupVertices (void){
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(linePosition), linePosition, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pointPosition), pointPosition, GL_STATIC_DRAW);
 }
 
 
@@ -95,6 +104,7 @@ void init(GLFWwindow* window) {
     cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f;
     pyrLocX = 0, pyrLocY = 2; pyrLocZ = 0;
 	lineLocX = 0, lineLocY = 0, lineLocZ = 0;
+	pointLocX = 0, pointLocY = 0, pointLocZ = 0;
     setupVertices();
 }
 
@@ -144,6 +154,23 @@ void display(GLFWwindow *window, double currentTime){
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_LINES, 0, 2);
+    }
+	
+    {
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(pointLocX, pointLocY, pointLocZ));
+
+        mvMat = vMat * mMat;
+		
+        glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_POINTS, 0, 3);
     }
 
 
