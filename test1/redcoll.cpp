@@ -15,7 +15,7 @@
 
 
 #define numVAOs 1
-#define numVBOs 4
+#define numVBOs 5
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
@@ -27,6 +27,8 @@ float pointLocX, pointLocY, pointLocZ;
 GLuint renderingProgram;
 GLuint vao[numVAOs];
 GLuint vbo[numVBOs];
+
+GLuint cizhuan = 0;
 
 GLuint mvLoc, projLoc;
 int width, height;
@@ -80,6 +82,16 @@ void setupVertices (void){
         -1,1,0,
         0,1,0,
     };
+
+    float pyrTextCoords[36] = {
+            0,0,1,0,0.5,1.0,
+            0,0,1,0,0.5,1.0,
+            0,0,1,0,0.5,1.0,
+            0,0,1,0,0.5,1.0,
+            0,0,1,1,0,1.0,
+            1,1,0,0,1,0,
+    };
+
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
     glGenBuffers(numVBOs, vbo);
@@ -95,6 +107,9 @@ void setupVertices (void){
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pointPosition), pointPosition, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[4]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pyrTextCoords), pyrTextCoords, GL_STATIC_DRAW);
 }
 
 
@@ -106,6 +121,9 @@ void init(GLFWwindow* window) {
 	lineLocX = 0, lineLocY = 0, lineLocZ = 0;
 	pointLocX = 0, pointLocY = 0, pointLocZ = 0;
     setupVertices();
+
+
+    cizhuan = loadTexture("cizhuan.png");
 }
 
 void display(GLFWwindow *window, double currentTime){
@@ -122,8 +140,8 @@ void display(GLFWwindow *window, double currentTime){
 
     vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
 	
-    for (int i = 0; i < 24; i++) {
-        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX + 2*cos(i), cubeLocY + 2*sin(i), cubeLocZ + sin(i)));
+    for (int i = 0; i < 1; i++) {
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
 
         mvMat = vMat * mMat;
 
@@ -176,10 +194,9 @@ void display(GLFWwindow *window, double currentTime){
 
     {
         mMat = glm::translate(glm::mat4(1.0f), glm::vec3(pyrLocX, pyrLocY, pyrLocZ));
-        //mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(sin(currentTime*2.0), cos(currentTime * 2.0),0.0 ));
         mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(0, -4, 0));
 
-        mMat *= glm::rotate(glm::mat4(1.0f), (float)((currentTime)), glm::vec3(0.0, 0.0, 1.0));
+        mMat *= glm::rotate(glm::mat4(1.0f), (float)((currentTime*2)), glm::vec3(1.0, 1.0, 1.0));
 
         mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(0, 4, 0));
 
@@ -196,6 +213,13 @@ void display(GLFWwindow *window, double currentTime){
         glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
+
+        glBindBuffer (GL_ARRAY_BUFFER, vbo[4]);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(1);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture (GL_TEXTURE_2D, cizhuan);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);

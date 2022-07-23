@@ -21,5 +21,6 @@ string readShaderSource(const char* shaderFile);
 
 GLuint createShaderProgram();
 
+GLuint loadTexture (const char* filename);
 
 #endif //TEST1_UTILS_H

@@ -3,6 +3,7 @@
 //
 
 #include "utils.h"
+#include <SOIL2/SOIL2.h>
 
 #pragma warning(disable: 4996)
 
@@ -96,4 +97,17 @@ GLuint createShaderProgram() {
     glLinkProgram(vfProgram);
 
     return vfProgram;
+}
+
+
+
+GLuint loadTexture(const char *fileName) {
+    auto txID = SOIL_load_OGL_texture(fileName, SOIL_LOAD_AUTO,
+        SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+
+    if (txID == 0) {
+		throw runtime_error("unable to load texture " + string(fileName));
+	}
+    
+	return txID;
 }
