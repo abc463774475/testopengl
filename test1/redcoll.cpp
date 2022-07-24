@@ -12,10 +12,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../utils.h"
+#include "../sphere.h"
 
 
 #define numVAOs 1
-#define numVBOs 5
+#define numVBOs 6
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
@@ -23,6 +24,7 @@ float pyrLocX, pyrLocY, pyrLocZ;
 
 float lineLocX, lineLocY, lineLocZ;
 float pointLocX, pointLocY, pointLocZ;
+float sphereLocX, sphereLocY, sphereLocZ;
 
 GLuint renderingProgram;
 GLuint vao[numVAOs];
@@ -34,6 +36,7 @@ GLuint mvLoc, projLoc;
 int width, height;
 float aspect;
 glm::mat4 pMat, vMat, mMat, mvMat;
+int sphereVer = 0;
 
 void setupVertices (void){
     float vertexPositions[108] = {
@@ -110,8 +113,13 @@ void setupVertices (void){
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[4]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(pyrTextCoords), pyrTextCoords, GL_STATIC_DRAW);
-}
 
+    sphere s;
+    auto spPos = s.getVerticesPostion();
+    sphereVer = spPos.size()/3;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[5]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float )*spPos.size(), &spPos[0], GL_STATIC_DRAW);
+}
 
 void init(GLFWwindow* window) {
     renderingProgram = createShaderProgram();
@@ -226,9 +234,39 @@ void display(GLFWwindow *window, double currentTime){
         glDrawArrays(GL_TRIANGLES, 0, 18);
     }
 
+    {
+        mMat = glm::translate(glm::mat4(1.0f), glm::vec3(sphereLocX, sphereLocY, sphereLocZ));
+
+
+        mMat *= glm::rotate(glm::mat4(1.0f), (float)((currentTime * 2)), glm::vec3(1.0, 1.0, 1.0));
+
+        mvMat = vMat * mMat;
+        mvMat *= glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+        glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[5]);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_TRIANGLES, 0, sphereVer);
+    }
+}
+
+
+void testSphere (){
+    sphere s;
+    auto vall = s.getVerticesPostion();
+
+    printf("vall size: %d\n", vall.size());
 }
 
 int main(int argn,char **argv) {
+    testSphere();
+
     auto str = readShaderSource("vertShader.glsl");
 	if (!glfwInit()) {
 		fprintf(stderr, "Failed to initialize GLFW\n");
