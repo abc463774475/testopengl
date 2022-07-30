@@ -130,13 +130,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\sphere.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\Sphere.cpp" />
     <ClCompile Include="..\utils.cpp" />
-    <ClCompile Include="redcoll.cpp" />
-    <ClCompile Include="test1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\sphere.h" />
+    <ClInclude Include="..\Sphere.h" />
     <ClInclude Include="..\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
