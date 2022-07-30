@@ -37,27 +37,10 @@ void sphere::generateVec3() {
         vertices.push_back(v0);
     }
 
-
-//    {
-//        // the last, 还是size设置味 slice
-//        vector<glm::vec3> v0 ;
-//        v0.push_back(glm::vec3(0, radius, 0));
-//        vertices.push_back(v0);
-//    }
-
-
-   /* {
-        vector<glm::vec3> v0;
-        auto v3 = glm::vec3 (0,radius,0);
-        for (int i = 0; i < slices; i++){
-            v0.push_back(v3);
-        }
-        vertices.push_back(v0);
-    }*/
 }
 
 
-vector<float> sphere::getVerticesPostion() {
+vector<float> sphere::getVerticesPostion(vector<float> &vText)  {
     generateVec3();
     int i = 0;
     auto trangle_num = slices * (stacks) + 2;
@@ -117,6 +100,14 @@ vector<float> sphere::getVerticesPostion() {
         vertices_position.push_back(p2.x);
         vertices_position.push_back(p2.y);
         vertices_position.push_back(p2.z);
+    }
+
+    auto totalSize = vertices_position.size()/9;
+    for (int i = 0 ; i < totalSize; i++){
+        float at[] = {0,0,1,0,1,1};
+        for (auto &it : at){
+            vText.push_back(it);
+        }
     }
 
     return vertices_position;

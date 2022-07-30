@@ -67,9 +67,7 @@ bool checkOpenGLError() {
     return foundError;
 }
 
-
 #define numVAOs 1
-
 
 GLuint createShaderProgram() {
     auto vshaderSource = readShaderSource("vertShader.glsl");

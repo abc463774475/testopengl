@@ -16,7 +16,7 @@
 
 
 #define numVAOs 1
-#define numVBOs 6
+#define numVBOs 7
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
@@ -115,10 +115,15 @@ void setupVertices (void){
     glBufferData(GL_ARRAY_BUFFER, sizeof(pyrTextCoords), pyrTextCoords, GL_STATIC_DRAW);
 
     sphere s;
-    auto spPos = s.getVerticesPostion();
+    vector<float > vSpText;
+    auto spPos = s.getVerticesPostion(vSpText);
     sphereVer = spPos.size()/3;
     glBindBuffer(GL_ARRAY_BUFFER, vbo[5]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float )*spPos.size(), &spPos[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[6]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float )*vSpText.size(), &vSpText[0], GL_STATIC_DRAW);
+
 }
 
 void init(GLFWwindow* window) {
@@ -137,6 +142,7 @@ void init(GLFWwindow* window) {
 void display(GLFWwindow *window, double currentTime){
     glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT);
+
     glUseProgram (renderingProgram) ;
 
     mvLoc = glGetUniformLocation(renderingProgram, "mv_matrix");
@@ -208,12 +214,7 @@ void display(GLFWwindow *window, double currentTime){
 
         mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(0, 4, 0));
 
-		
         mvMat = vMat* mMat;
-
-        //mvMat *= glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
-		
-        // mvMat *= glm::rotate(glm::mat4(1), (float)(currentTime), glm::vec3(0.0,0.0, 1.0));
 
 		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
@@ -250,6 +251,13 @@ void display(GLFWwindow *window, double currentTime){
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
 
+        glBindBuffer (GL_ARRAY_BUFFER, vbo[6]);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(1);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture (GL_TEXTURE_2D, cizhuan);
+
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLES, 0, sphereVer);
@@ -258,10 +266,10 @@ void display(GLFWwindow *window, double currentTime){
 
 
 void testSphere (){
-    sphere s;
-    auto vall = s.getVerticesPostion();
-
-    printf("vall size: %d\n", vall.size());
+//    sphere s;
+//    auto vall = s.getVerticesPostion();
+//
+//    printf("vall size: %d\n", vall.size());
 }
 
 int main(int argn,char **argv) {
