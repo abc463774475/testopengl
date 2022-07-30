@@ -16,7 +16,7 @@
 
 
 #define numVAOs 1
-#define numVBOs 7
+#define numVBOs 8
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
@@ -124,6 +124,10 @@ void setupVertices (void){
     glBindBuffer(GL_ARRAY_BUFFER, vbo[6]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float )*vSpText.size(), &vSpText[0], GL_STATIC_DRAW);
 
+    auto spNormarl = spPos;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[7]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float )*spNormarl.size(), &spNormarl[0], GL_STATIC_DRAW);
 }
 
 void init(GLFWwindow* window) {
