@@ -132,10 +132,12 @@
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\Sphere.cpp" />
+    <ClCompile Include="..\Torus.cpp" />
     <ClCompile Include="..\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sphere.h" />
+    <ClInclude Include="..\Torus.h" />
     <ClInclude Include="..\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

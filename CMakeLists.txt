@@ -29,4 +29,4 @@ add_executable(test1
         C:/Users/hxd/Desktop/vcpkg/vcpkg/installed/x64-windows/lib/OpenGL32.Lib
         C:/Users/hxd/Desktop/vcpkg/vcpkg/installed/x64-windows/lib/glfw3dll.lib
         C:/Users/hxd/Desktop/vcpkg/vcpkg/installed/x64-windows/lib/GlU32.Lib
-        C:/Users/hxd/Desktop/vcpkg/vcpkg/installed/x64-windows/lib/soil2.lib Sphere.cpp Sphere.h main.cpp)
+        C:/Users/hxd/Desktop/vcpkg/vcpkg/installed/x64-windows/lib/soil2.lib Sphere.cpp Sphere.h main.cpp Torus.cpp Torus.h)

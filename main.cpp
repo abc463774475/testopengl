@@ -11,11 +11,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include "Torus.h"
 
 using namespace std;
 
 #define numVAOs 1
-#define numVBOs 3
+#define numVBOs 4
 
 float cameraX, cameraY, cameraZ;
 float sphereLocX, sphereLocY, sphereLocZ;
@@ -32,19 +33,20 @@ int width, height;
 float aspect;
 glm::mat4 pMat, vMat, mMat, mvMat;
 
-Sphere mySphere(48);
+
+Torus myTorus(48, 0.5f, 0.2f);
 
 void setupVertices() {
-    auto ind = mySphere.getIndices();
-    auto ver = mySphere.getVertices();
-    auto nor = mySphere.getNormals();
-    auto tex = mySphere.getTexCoords();
+    auto ind = myTorus.getIndices();
+    auto ver = myTorus.getVertices();
+    auto nor = myTorus.getNormals();
+    auto tex = myTorus.getTexCoords();
 
     vector<float> pvalues;
     vector<float> nvalues;
     vector<float> tvalues;
 
-    auto numIndices = mySphere.getNumIndices();
+    auto numIndices = myTorus.getNumIndices();
     for (int i = 0; i < numIndices; i++) {
         pvalues.push_back(ver[ind[i]].x);
         pvalues.push_back(ver[ind[i]].y);
@@ -71,6 +73,8 @@ void setupVertices() {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glBufferData(GL_ARRAY_BUFFER, nvalues.size() * sizeof(float), &nvalues[0], GL_STATIC_DRAW);
 
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
+    glBufferData(GL_ARRAY_BUFFER, ind.size() * sizeof(float), &ind[0], GL_STATIC_DRAW);
 }
 
 void init(GLFWwindow *wwindow) {
@@ -122,7 +126,9 @@ void display(GLFWwindow *window, double currentTime) {
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        glDrawArrays(GL_TRIANGLES, 0, mySphere.getNumIndices());
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+        glDrawElements(GL_TRIANGLES, myTorus.getNumIndices(), GL_UNSIGNED_INT, 0);
     }
 }
 
