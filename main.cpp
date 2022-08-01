@@ -34,7 +34,7 @@ float aspect;
 glm::mat4 pMat, vMat, mMat, mvMat;
 
 
-Torus myTorus(48, 0.5f, 0.2f);
+Torus myTorus;
 
 void setupVertices() {
     auto ind = myTorus.getIndices();
@@ -124,10 +124,13 @@ void display(GLFWwindow *window, double currentTime) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture (GL_TEXTURE_2D, cizhuan);
 
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_POINTS, 0, myTorus.getNumIndices());
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+
         glDrawElements(GL_TRIANGLES, myTorus.getNumIndices(), GL_UNSIGNED_INT, 0);
     }
 }

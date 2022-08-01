@@ -39,10 +39,10 @@ void Torus::init() {
         auto amt = toRadians(i * 360.0 / prec);
 
         auto rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 0.0f, 1.0f));
-        glm::vec3 initPos(rMat * glm::vec4(outer, 0.0f, 1.0f, 1.0f));
+        glm::vec3 initPos(rMat * glm::vec4(outer, 0.0f, 0.0f, 1.0f));
 
-        vertices[i] = initPos + glm::vec3(inner, 0.0f, 0.0f);
-        texCoords[i] = glm::vec2(0.0f, i / (float) prec);
+        vertices[i] = glm::vec3 (initPos + glm::vec3(inner, 0.0f, 0.0f));
+        texCoords[i] = glm::vec2(0.0f, (float)i / (float) prec);
 
         rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -53,42 +53,43 @@ void Torus::init() {
         normals[i] = glm::cross(tTangents[i], sTangents[i]);
     }
 
-    for (int ring =1; ring < prec +1; ring++){
-        for (int vert = 0 ; vert < prec +1; vert++){
+    for (int ring = 1; ring < prec + 1; ring++) {
+        for (int vert = 0; vert < prec + 1; vert++) {
             auto i = vert;
             auto amt = toRadians(ring * 360.0 / prec);
             auto rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-            vertices[ring*(prec+1) +i] = glm::vec3 (rMat * glm::vec4(vertices[i], 1.0f));
+            vertices[ring * (prec + 1) + i] = glm::vec3(rMat * glm::vec4(vertices[i], 1.0f));
 
-            texCoords[ring * (prec+1) + vert] = glm::vec2(ring*2.0f / (float) prec,texCoords[vert].t);
-            if (texCoords[ring * (prec+1) + vert].s > 1.0f) {
-                texCoords[ring * (prec+1) + vert].s -= 1.0f;
+            texCoords[ring * (prec + 1) + vert] = glm::vec2(ring * 2.0f / (float) prec, texCoords[vert].t);
+            if (texCoords[ring * (prec + 1) + i].s > 1.0f) {
+                texCoords[ring * (prec + 1) + i].s -= 1.0f;
             }
 
             rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-            sTangents[ring*(prec+1) +i] = glm::vec3(rMat* glm::vec4(sTangents[i], 1.0f));
+            sTangents[ring * (prec + 1) + i] = glm::vec3(rMat * glm::vec4(sTangents[i], 1.0f));
 
             rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-            tTangents[ring*(prec+1) +i] = glm::vec3(rMat* glm::vec4(tTangents[i], 1.0f));
+            tTangents[ring * (prec + 1) + i] = glm::vec3(rMat * glm::vec4(tTangents[i], 1.0f));
 
             rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-            normals[ring*(prec+1) +i] = glm::vec3(rMat* glm::vec4(normals[i], 1.0f));
+            normals[ring * (prec + 1) + i] = glm::vec3(rMat * glm::vec4(normals[i], 1.0f));
         }
     }
 
-    for (int ring = 0 ; ring < prec ; ring++){
-        for (int vert = 0 ; vert < prec ; vert++){
-            auto i = ring*(prec+1) + vert;
-            indices[ring*prec*6 + vert*6 + 0] = i;
-            indices[ring*prec*6 + vert*6 + 1] = i + 1;
-            indices[ring*prec*6 + vert*6 + 2] = i + prec + 1;
-            indices[ring*prec*6 + vert*6 + 3] = i + 1;
-            indices[ring*prec*6 + vert*6 + 4] = i + prec + 1;
-            indices[ring*prec*6 + vert*6 + 5] = i + prec + 2;
+    for (int ring = 0; ring < prec; ring++) {
+        for (int vert = 0; vert < prec; vert++) {
+            indices[((ring * prec + vert) * 2) * 3 + 0] = ring * (prec + 1) + vert;
+            indices[((ring * prec + vert) * 2) * 3 + 1] = (ring + 1) * (prec + 1) + vert;
+            indices[((ring * prec + vert) * 2) * 3 + 2] = (ring) * (prec + 1) + vert + 1;
+
+            indices[((ring * prec + vert) * 2 + 1) * 3 + 0] = (ring) * (prec + 1) + vert + 1;
+            indices[((ring * prec + vert) * 2 + 1) * 3 + 1] = (ring+1) * (prec + 1) + vert ;
+            indices[((ring * prec + vert) * 2 + 1) * 3 + 2] = (ring + 1) * (prec + 1) + vert + 1;
+
         }
     }
 }
