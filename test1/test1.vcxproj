@@ -130,12 +130,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ImportedModel.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\Sphere.cpp" />
     <ClCompile Include="..\Torus.cpp" />
     <ClCompile Include="..\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ImportedModel.h" />
     <ClInclude Include="..\Sphere.h" />
     <ClInclude Include="..\Torus.h" />
     <ClInclude Include="..\utils.h" />

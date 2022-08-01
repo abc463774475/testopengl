@@ -12,11 +12,12 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include "Torus.h"
+#include "ImportedModel.h"
 
 using namespace std;
 
 #define numVAOs 1
-#define numVBOs 4
+#define numVBOs 3
 
 float cameraX, cameraY, cameraZ;
 float sphereLocX, sphereLocY, sphereLocZ;
@@ -33,31 +34,32 @@ int width, height;
 float aspect;
 glm::mat4 pMat, vMat, mMat, mvMat;
 
-
 Torus myTorus;
 
+ImportedModel myModel("blendor.obj");
+
+
 void setupVertices() {
-    auto ind = myTorus.getIndices();
-    auto ver = myTorus.getVertices();
-    auto nor = myTorus.getNormals();
-    auto tex = myTorus.getTexCoords();
+   auto vert = myModel.getVertices();
+    auto norm = myModel.getNormals();
+    auto tex = myModel.getTexCoords();
+    int numObjVertices = myModel.getNumVertices();
 
-    vector<float> pvalues;
-    vector<float> nvalues;
-    vector<float> tvalues;
+    std::vector<float> pvalues;
+    std::vector<float> nvalues;
+    std::vector<float> tvalues;
 
-    auto numIndices = myTorus.getNumIndices();
-    for (int i = 0; i < numIndices; i++) {
-        pvalues.push_back(ver[ind[i]].x);
-        pvalues.push_back(ver[ind[i]].y);
-        pvalues.push_back(ver[ind[i]].z);
+    for (int i = 0; i < numObjVertices;i++){
+        pvalues.push_back(vert[i].x);
+        pvalues.push_back(vert[i].y);
+        pvalues.push_back(vert[i].z);
 
-        nvalues.push_back(nor[ind[i]].x);
-        nvalues.push_back(nor[ind[i]].y);
-        nvalues.push_back(nor[ind[i]].z);
+        nvalues.push_back(norm[i].x);
+        nvalues.push_back(norm[i].y);
+        nvalues.push_back(norm[i].z);
 
-        tvalues.push_back(tex[ind[i]].s);
-        tvalues.push_back(tex[ind[i]].t);
+        tvalues.push_back(tex[i].s);
+        tvalues.push_back(tex[i].t);
     }
 
     glGenVertexArrays(numVAOs, vao);
@@ -65,17 +67,16 @@ void setupVertices() {
     glGenBuffers(numVBOs, vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, pvalues.size() * sizeof(float), &pvalues[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, pvalues.size()*4, &pvalues[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, tvalues.size() * sizeof(float), &tvalues[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, tvalues.size()*4, &tvalues[0], GL_STATIC_DRAW);
+
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ARRAY_BUFFER, nvalues.size() * sizeof(float), &nvalues[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, nvalues.size()*4, &nvalues[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
-    glBufferData(GL_ARRAY_BUFFER, ind.size() * sizeof(float), &ind[0], GL_STATIC_DRAW);
-}
+};
 
 void init(GLFWwindow *wwindow) {
     renderingProgram = createShaderProgram();
@@ -128,10 +129,8 @@ void display(GLFWwindow *window, double currentTime) {
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        glDrawArrays(GL_POINTS, 0, myTorus.getNumIndices());
+        glDrawArrays(GL_POINTS, 0, myModel.getNumVertices());
 
-
-        glDrawElements(GL_TRIANGLES, myTorus.getNumIndices(), GL_UNSIGNED_INT, 0);
     }
 }
 
