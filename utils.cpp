@@ -13,7 +13,7 @@ string readShaderSource(const char *shaderFile) {
 		throw runtime_error("unable to open file " + string(shaderFile));
 	}
 	string source;
-	char line[256];
+	char line[2560];
 	while (fgets(line, 256, file)) {
 		source += string(line) + "\n";
 	}
@@ -79,15 +79,21 @@ GLuint createShaderProgram() {
     auto s2 = fshaderSource.c_str();
 
     glShaderSource(vSharder, 1, &s1, NULL);
-    glShaderSource(fSharder, 1, &s2, NULL);
+    printShaderLog(vSharder);
 
     glCompileShader(vSharder);
+    printShaderLog(vSharder);
+	
+	
+    glShaderSource(fSharder, 1, &s2, NULL);
+    printShaderLog(fSharder);
+
+    
     glCompileShader(fSharder);
+    printShaderLog(fSharder);
 
     checkOpenGLError();
 
-    printShaderLog(vSharder);
-    printShaderLog(fSharder);
 
     auto vfProgram = glCreateProgram();
     glAttachShader(vfProgram, vSharder);
@@ -108,4 +114,61 @@ GLuint loadTexture(const char *fileName) {
 	}
     
 	return txID;
+}
+
+float *goldAmbient() {
+    static float ambient[] = { 0.24725f, 0.1995f, 0.0745f, 1.0f };
+    return ambient;
+}
+
+float *goldDiffuse() {
+    static float diffuse[] = { 0.75164f, 0.60648f, 0.22648f, 1.0f };
+    return diffuse;
+}
+
+float *goldSpecular() {
+    static float specular[] = { 0.628281f, 0.555802f, 0.366065f, 1.0f };
+    return specular;
+}
+
+float goldShininess() {
+    return 0.4f * 128.0f;
+}
+
+float *silverAmbient() {
+    static float ambient[] = { 0.19225f, 0.19225f, 0.19225f, 1.0f };
+    return ambient;
+}
+
+float *silverDiffuse() {
+    static float diffuse[] = { 0.50754f, 0.50754f, 0.50754f, 1.0f };
+    return diffuse;
+}
+
+float *silverSpecular() {
+    static float specular[] = { 0.508273f, 0.508273f, 0.508273f, 1.0f };
+    return specular;
+}
+
+float silverShininess() {
+    return 0.4f * 128.0f;
+}
+
+float *bronzeAmbient() {
+    static float ambient[] = { 0.2125f, 0.1275f, 0.054f, 1.0f };
+    return ambient;
+}
+
+float *bronzeDiffuse() {
+    static float diffuse[] = { 0.714f, 0.4284f, 0.18144f, 1.0f };
+    return diffuse;
+}
+
+float *bronzeSpecular() {
+    static float specular[] = { 0.393548f, 0.271906f, 0.166721f, 1.0f };
+    return specular;
+}
+
+float bronzeShininess() {
+    return 0.2f * 128.0f;
 }
