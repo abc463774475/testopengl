@@ -111,7 +111,7 @@ void init(GLFWwindow *wwindow) {
     sphereLocY = 0.0f;
     sphereLocZ = 0.0f;
 
-    cizhuan = loadTexture("cizhuan.png");
+    cizhuan = loadTexture("../cizhuan.png");
 }
 
 void installLights(glm::mat4 vMatrix) {
