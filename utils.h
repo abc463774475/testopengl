@@ -15,8 +15,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
 using namespace std;
+
+
 string readShaderSource(const char* shaderFile);
 
 GLuint createShaderProgram();
