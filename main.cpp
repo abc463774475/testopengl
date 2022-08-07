@@ -25,6 +25,8 @@ GLuint vao[numVAOs];
 GLuint vbo[numVBOs];
 
 GLuint cizhuan = 0;
+GLuint cizhuan2 = 0;
+
 
 
 GLuint mvLoc, projLoc;
@@ -84,7 +86,11 @@ void init(GLFWwindow *wwindow) {
     sphereLocY = 0.0f;
     sphereLocZ = 0.0f;
 
+
+    cizhuan2 = loadTexture("../cizhuan.png");
+
     cizhuan = loadTexture("../cizhuan.jpg");
+
 }
 
 void display(GLFWwindow *window, double currentTime) {
@@ -117,8 +123,8 @@ void display(GLFWwindow *window, double currentTime) {
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(1);
 
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture (GL_TEXTURE_2D, cizhuan);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture (GL_TEXTURE_2D, cizhuan2);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
