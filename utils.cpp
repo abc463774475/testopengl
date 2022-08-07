@@ -70,8 +70,8 @@ bool checkOpenGLError() {
 #define numVAOs 1
 
 GLuint createShaderProgram() {
-    auto vshaderSource = readShaderSource("vertShader.glsl");
-    auto fshaderSource = readShaderSource("fragShader.glsl");
+    auto vshaderSource = readShaderSource("../vertShader.glsl");
+    auto fshaderSource = readShaderSource("../fragShader.glsl");
 
     auto vSharder = glCreateShader(GL_VERTEX_SHADER);
     auto fSharder = glCreateShader(GL_FRAGMENT_SHADER);

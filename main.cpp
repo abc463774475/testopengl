@@ -84,7 +84,7 @@ void init(GLFWwindow *wwindow) {
     sphereLocY = 0.0f;
     sphereLocZ = 0.0f;
 
-    cizhuan = loadTexture("cizhuan.png");
+    cizhuan = loadTexture("../cizhuan.jpg");
 }
 
 void display(GLFWwindow *window, double currentTime) {
@@ -117,8 +117,8 @@ void display(GLFWwindow *window, double currentTime) {
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(1);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture (GL_TEXTURE_2D, cizhuan);
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture (GL_TEXTURE_2D, cizhuan);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
