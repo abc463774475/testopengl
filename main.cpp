@@ -53,10 +53,10 @@ float lightAmbient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float lightDiffuse[4] = {1,1,1,1};
 float lightSpecular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-auto matAmb = emeraldAmbient();
-auto matDiff = emeraldDiffuse();
-auto matSpec = emeraldSpecular();
-float matShininess = emeraldShininess();
+auto matAmb = jadeAmbient();
+auto matDiff = jadeDiffuse();
+auto matSpec = jadeSpecular();
+float matShininess = jadeShininess();
 
 void setupVertices() {
     auto ind = mySphere.getIndices();
@@ -181,9 +181,18 @@ void display(GLFWwindow *window, double currentTime) {
         glEnableVertexAttribArray(0);
 
         {
-            glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-            glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+            glBindBuffer (GL_ARRAY_BUFFER, vbo[1]);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
             glEnableVertexAttribArray(1);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture (GL_TEXTURE_2D, cizhuan);
+        }
+
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+            glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+            glEnableVertexAttribArray(2);
         }
 
         glEnable(GL_CULL_FACE);

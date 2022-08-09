@@ -25,6 +25,10 @@ uniform mat4 mv_matrix;
 uniform mat4 proj_matrix;
 uniform mat4 norm_matrix;
 
+in vec2 tc;
+
+layout (binding = 0) uniform sampler2D samp;
+
 void main(void){
-    fragColor = varyingColor;
+    fragColor = 0.5*varyingColor + 0.5* texture(samp, tc);
 }

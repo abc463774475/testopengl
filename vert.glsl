@@ -2,10 +2,16 @@
 
 // 两个输入参数，1. 第一个是输入的顶点位置，2. 第二个是输入的顶点法线
 layout (location = 0) in vec3 a_position;
-layout (location = 1) in vec3 a_normal;
+layout (location = 1) in vec2 texCoord;
+layout (location = 2) in vec3 a_normal;
 
 // 输出参数
 out vec4 varyingColor;
+
+out vec2 tc;
+
+// 顶点着色器的 binding 看不懂. 不知道怎么来的？也不知道怎么走的？
+layout (binding = 0) uniform sampler2D samp;
 
 // 考虑这是点光源还是啥？？光源真的很重要
 struct PositionalLight {
@@ -64,4 +70,6 @@ void main(){
     //varyingColor = vec4((ambient.xyz + diffuse.xyz + specular1.xyz),0.5);
     // 计算深度值
     gl_Position = proj_matrix * position;
+
+    tc = texCoord;
 }
