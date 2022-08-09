@@ -70,7 +70,7 @@ bool checkOpenGLError() {
 #define numVAOs 1
 
 GLuint createShaderProgram() {
-    auto vshaderSource = readShaderSource("../vertShader.glsl");
+    auto vshaderSource = readShaderSource("../vert.glsl");
     auto fshaderSource = readShaderSource("../fragShader.glsl");
 
     auto vSharder = glCreateShader(GL_VERTEX_SHADER);
@@ -192,3 +192,98 @@ float jadeShininess() {
     return 0.1f * 128.0f;
 }
 
+
+float *obsidianAmbient() {
+    static float ambient[] = { 0.05375f, 0.05f, 0.06625f, 0.82f };
+    return ambient;
+}
+
+float *obsidianDiffuse() {
+    static float diffuse[] = { 0.18275f, 0.17f, 0.22525f, 0.82f };
+    return diffuse;
+}
+
+float *obsidianSpecular() {
+    static float specular[] = { 0.332741f, 0.328634f, 0.346435f, 0.82f };
+    return specular;
+}
+
+float obsidianShininess() {
+    return 0.3f * 128.0f;
+}
+
+float * pearlAmbient() {
+    static float ambient[] = { 0.25f, 0.20725f, 0.20725f, 0.922f };
+    return ambient;
+}
+
+float * pearlDiffuse() {
+    static float diffuse[] = { 1.0f, 0.829f, 0.829f, 0.922f };
+    return diffuse;
+}
+
+float * pearlSpecular() {
+    static float specular[] = { 0.296648f, 0.296648f, 0.296648f, 0.922f };
+    return specular;
+}
+
+float pearlShininess() {
+    return 0.088f * 128.0f;
+}
+
+float * emeraldAmbient() {
+    static float ambient[] = { 0.0215f, 0.1745f, 0.0215f, 0.55f };
+    return ambient;
+}
+
+float * emeraldDiffuse() {
+    static float diffuse[] = { 0.07568f, 0.61424f, 0.07568f, 0.55f };
+    return diffuse;
+}
+
+float * emeraldSpecular() {
+    static float specular[] = { 0.633f, 0.727811f, 0.633f, 0.55f };
+    return specular;
+}
+
+float emeraldShininess() {
+    return 0.6f * 128.0f;
+}
+
+float * chromeAmbient() {
+    static float ambient[] = { 0.25f, 0.25f, 0.25f, 0.55f };
+    return ambient;
+}
+
+float * chromeDiffuse() {
+    static float diffuse[] = { 0.4f, 0.4f, 0.4f, 0.55f };
+    return diffuse;
+}
+
+float * chromeSpecular() {
+    static float specular[] = { 0.774597f, 0.774597f, 0.774597f, 0.55f };
+    return specular;
+}
+
+float chromeShininess() {
+    return 0.6f * 128.0f;
+}
+
+float * glassAmbient() {
+    static float ambient[] = { 0.0f, 0.0f, 0.0f, 0.55f };
+    return ambient;
+}
+
+float * glassDiffuse() {
+    static float diffuse[] = { 0.0f, 0.0f, 0.0f, 0.55f };
+    return diffuse;
+}
+
+float * glassSpecular() {
+    static float specular[] = { 0.0f, 0.0f, 0.0f, 0.55f };
+    return specular;
+}
+
+float glassShininess() {
+    return 0.25f * 128.0f;
+}

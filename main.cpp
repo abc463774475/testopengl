@@ -17,8 +17,6 @@ using namespace std;
 #define numVAOs 1
 #define numVBOs 3
 
-float cameraX, cameraY, cameraZ;
-float sphereLocX, sphereLocY, sphereLocZ;
 
 GLuint renderingProgram;
 GLuint vao[numVAOs];
@@ -28,19 +26,25 @@ GLuint cizhuan = 0;
 GLuint cizhuan2 = 0;
 
 
-
-GLuint mvLoc, projLoc,nLoc;
+GLuint mvLoc, projLoc, nLoc;
 int width, height;
 float aspect;
 glm::mat4 pMat, vMat, mMat, mvMat, invTrMat;
 
-Sphere mySphere(48);
+Sphere mySphere(200);
 
 GLuint globalAmbLoc, ambLoc, diffLoc, specLoc, posLoc, mAmbLoc, mDiffLoc, mSpecLoc, mShinLoc;
 
-glm::vec3 currentLightPos, lightPosV; // 在模型何视觉空间中的位置
+glm::vec3 currentLightPos; // 在模型何视觉空间中的位置
 
 float lightPos[3];
+auto cameraX = 1.0f;
+auto cameraY = 1.0f;
+auto cameraZ = 5.0f;
+
+auto sphereLocX = 1.0f;
+auto sphereLocY = 1.0f;
+auto sphereLocZ = 1.0f;
 glm::vec3 initLightPosLoc = glm::vec3(5.0f, 5.0f, 5.0f);
 
 // 白光特型
@@ -49,10 +53,10 @@ float lightAmbient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float lightDiffuse[4] = {1,1,1,1};
 float lightSpecular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-auto matAmb = jadeAmbient();
-auto matDiff = jadeDiffuse();
-auto matSpec = jadeSpecular();
-float matShininess = jadeShininess();
+auto matAmb = emeraldAmbient();
+auto matDiff = emeraldDiffuse();
+auto matSpec = emeraldSpecular();
+float matShininess = emeraldShininess();
 
 void setupVertices() {
     auto ind = mySphere.getIndices();
@@ -96,13 +100,7 @@ void setupVertices() {
 void init(GLFWwindow *wwindow) {
     renderingProgram = createShaderProgram();
     setupVertices();
-    cameraX = 1.0f;
-    cameraY = 1.0f;
-    cameraZ = 5.0f;
 
-    sphereLocX = 1.0f;
-    sphereLocY = 1.0f;
-    sphereLocZ = 1.0f;
 
 
     cizhuan2 = loadTexture("../cizhuan.png");
@@ -113,21 +111,25 @@ void init(GLFWwindow *wwindow) {
 
 
 void installLights(glm::mat4 vMatrix) {
-    lightPosV = glm::vec3(vMatrix * glm::vec4(currentLightPos, 1.0f));
+    // 这里是计算 相机视角，即人眼位置，相对于点光源的相对偏移位置。为什么要计算一个相对位置？
+    // 图形学由一堆算法构成，讲解的是非常严密的逻辑思维，所以必须刨根问底。我虽然写了那么久的golang c++。但是 重新学计算机原理还是收货颇丰。。可以引申到图形学
+    auto lightPosV = glm::vec3(vMatrix * glm::vec4(currentLightPos, 1.0f));
+
+    // auto lightPosV = glm::vec3(currentLightPos);
 
     lightPos[0] = lightPosV.x;
     lightPos[1] = lightPosV.y;
     lightPos[2] = lightPosV.z;
 
-    globalAmbLoc = glGetUniformLocation (renderingProgram, "globalAmbient");
-    ambLoc = glGetUniformLocation (renderingProgram, "light.ambient");
-    diffLoc = glGetUniformLocation (renderingProgram, "light.diffuse");
-    specLoc = glGetUniformLocation (renderingProgram, "light.specular");
-    posLoc = glGetUniformLocation (renderingProgram, "light.position");
-    mAmbLoc = glGetUniformLocation (renderingProgram, "material.ambient");
-    mDiffLoc = glGetUniformLocation (renderingProgram, "material.diffuse");
-    mSpecLoc = glGetUniformLocation (renderingProgram, "material.specular");
-    mShinLoc = glGetUniformLocation (renderingProgram, "material.shininess");
+    globalAmbLoc = glGetUniformLocation(renderingProgram, "globalAmbient");
+    ambLoc = glGetUniformLocation(renderingProgram, "light.ambient");
+    diffLoc = glGetUniformLocation(renderingProgram, "light.diffuse");
+    specLoc = glGetUniformLocation(renderingProgram, "light.specular");
+    posLoc = glGetUniformLocation(renderingProgram, "light.position");
+    mAmbLoc = glGetUniformLocation(renderingProgram, "material.ambient");
+    mDiffLoc = glGetUniformLocation(renderingProgram, "material.diffuse");
+    mSpecLoc = glGetUniformLocation(renderingProgram, "material.specular");
+    mShinLoc = glGetUniformLocation(renderingProgram, "material.shininess");
 
     glProgramUniform4fv(renderingProgram, globalAmbLoc, 1, globalAmbient);
     glProgramUniform4fv(renderingProgram, ambLoc, 1, lightAmbient);
@@ -160,8 +162,13 @@ void display(GLFWwindow *window, double currentTime) {
 
         mvMat = vMat * mMat;
 
+        static int is =1;
+        if (is++ == 1){
+
+        }
+
         currentLightPos = glm::vec3(initLightPosLoc.x, initLightPosLoc.y, initLightPosLoc.z);
-        installLights (vMat);
+        installLights(vMat);
 
         invTrMat = glm::transpose(glm::inverse(mvMat));
 
@@ -174,7 +181,7 @@ void display(GLFWwindow *window, double currentTime) {
         glEnableVertexAttribArray(0);
 
         {
-            glBindBuffer (GL_ARRAY_BUFFER, vbo[2]);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
             glEnableVertexAttribArray(1);
         }
